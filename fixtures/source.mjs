@@ -3,7 +3,18 @@ import { listen } from '../src/http.mjs';
 import { createHash } from 'node:crypto';
 export async function startFixture() {
 
-  async function route(){return {status:404,body:{}};}
+  let portalState=null;
+  async function route(url,request){
+    if(url.pathname==='/state'){
+      if(request.method==='POST'){
+        let bytes=0;const chunks=[];
+        for await(const chunk of request){bytes+=chunk.length;if(bytes>65536)throw new Error('门户状态过大');chunks.push(chunk);}
+        portalState=JSON.parse(Buffer.concat(chunks).toString('utf8'));
+      }
+      return {body:portalState};
+    }
+    return {status:404,body:{}};
+  }
 
   return listen(async (url, request) => {
     if (url.pathname === '/app.js') return { type: 'text/javascript; charset=utf-8', body: await readFile(new URL('../portal/app.js', import.meta.url), 'utf8') };
