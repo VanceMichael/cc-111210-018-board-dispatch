@@ -11,7 +11,9 @@
     "test": "node --test test/*.test.mjs",
     "demo": "node src/demo.mjs",
     "start": "node src/main.mjs",
-    "source": "node fixtures/main.mjs"
+    "source": "node fixtures/main.mjs",
+    "dispatch": "node scripts/dispatch.mjs",
+    "demo:dispatch": "node src/demo-dispatch.mjs"
   },
   "dependencies": {
     "playwright": "1.56.1"
